@@ -1,0 +1,11 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: manifests
+  namespace: flux-system
+spec:
+  interval: 60s
+  ref:
+    branch: main
+  url: https://github.com/popilmv/flux/clusters/my-cluster
