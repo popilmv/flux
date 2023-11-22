@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: golang-web
-          image: docker.io/marina1327/app1-go:dev-2023-11-09-15-26-51 # {"$imagepolicy": "flux-system:main"}
+          image: docker.io/marina1327/app1-go:dev-2023-11-09-13-28-33 # {"$imagepolicy": "flux-system:main"}
           ports:
             - containerPort: 80
