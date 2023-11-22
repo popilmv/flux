@@ -33,3 +33,8 @@ flux-system       kustomize-controller-9c588946c-mb5mf                1/1     Ru
 flux-system       notification-controller-76dc5d768-grnqg             1/1     Running  
 flux-system       source-controller-6c49485888-rsx8v                  1/1     Running             
 
+For image update:
+```
+flux bootstrap github --components-extra=image-reflector-controller,image-automation-controller --owner=$GITHUB_USER --repository=flux-system --branch=main --path=clusters/my-cluster --read-write-key --personal
+```
+
