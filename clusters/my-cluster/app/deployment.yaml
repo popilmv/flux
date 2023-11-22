@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-dev
+  namespace: dev
+  labels:
+    app: my-golang-deploy
+    release: beta
+spec:
+  selector:
+    matchLabels:
+      project: golang
+  template:
+    metadata:
+      labels:
+        project: golang
+    spec:
+      containers:
+        - name: golang-web
+          image: docker.io/marina1327/app1-go:dev-2023-11-09-15-26-51 # {"$imagepolicy": "flux-system:main"}
+          ports:
+            - containerPort: 8080
