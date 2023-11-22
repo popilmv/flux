@@ -14,9 +14,11 @@ spec:
     spec:
       containers:
         - name: podinfod
-          image: docker.io/marina1327/app1-go:dev-2023-11-09-15-26-51
+          image: docker.io/marina1327/app1-go:dev-2023-11-09-15-26-51 # {"$imagepolicy": "flux-system:podinfo"}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 9898
               protocol: TCP
+
+
