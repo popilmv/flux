@@ -38,3 +38,58 @@ For image update:
 flux bootstrap github --components-extra=image-reflector-controller,image-automation-controller --owner=$GITHUB_USER --repository=flux-system --branch=main --path=clusters/my-cluster --read-write-key --personal
 ```
 
+Add in ./clusters/my-cluster/podinfo-deployment.yaml
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: podinfo
+  template:
+    metadata:
+      labels:
+        app: podinfo
+    spec:
+      containers:
+        - name: podinfod
+          image: docker.io/marina1327/app1-go:dev-2023-11-09-15-26-51 # {"$imagepolicy": "flux-system:podinfo"}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9898
+              protocol: TCP
+```
+
+Do to apply in Flux:
+```
+flux reconcile kustomization flux-system --with-source
+```
+
+Check img in podinfo
+
+```
+kubectl get deployment/podinfo -oyaml | grep 'image:'
+```
+
+Imgrep: **flux create image repository podinfo --image=docker.io/marina1327/app1-go --interval=5m --export > ./clusters/my-cluster/podinfo-registry.yaml**
+
+ImagePolicy ***flux create image policy podinfo --image-ref=podinfo --select-semver="^dev-(?P<ts>[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+)$" --export > ./clusters/my-cluster/podinfo-policy.yaml***
+
+Check tags: 
+```
+flux get image repository podinfo
+```
+
+List of all tags:
+```
+kubectl -n flux-system describe imagerepositories podinfo
+```
+ImageUpdateAutomation
+```
+flux create image update flux-system --interval=10m --git-repo-ref=flux --git-repo-path="./clusters/my-cluster" --checkout-branch=main --push-branch=main --author-name=fluxcdbot --author-email=fluxcdbot@users.noreply.github.com --commit-template="{{range .Updated.Images}}{{println .}}{{end}}" --export > ./flux-system-automation.yaml
+```
