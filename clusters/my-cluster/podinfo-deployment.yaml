@@ -2,7 +2,7 @@ auapiVersion: apps/v1
 kind: Deployment
 metadata:
   name: podinfo
-  namespace: default
+  namespace: flux-system
 spec:
   selector:
     matchLabels:
