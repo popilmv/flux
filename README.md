@@ -97,7 +97,7 @@ flux create image update flux-system --interval=10m --git-repo-ref=flux --git-re
 
 Helm
 
-``
+```
 helm repo add nginx-stable https://helm.nginx.com/stable && helm repo update
 ```
 
