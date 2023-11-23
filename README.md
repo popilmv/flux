@@ -33,9 +33,9 @@ flux-system       kustomize-controller-9c588946c-mb5mf                1/1     Ru
 flux-system       notification-controller-76dc5d768-grnqg             1/1     Running  
 flux-system       source-controller-6c49485888-rsx8v                  1/1     Running             
 
-For image update:
+For image update: (https://fluxcd.io/flux/guides/image-update/) 
 ```
-flux bootstrap github --components-extra=image-reflector-controller,image-automation-controller --owner=$GITHUB_USER --repository=flux-system --branch=main --path=clusters/my-cluster --read-write-key --personal
+flux bootstrap git --components-extra=image-reflector-controller,image-automation-controller --owner=$GITHUB_USER --repository=flux-system --branch=main --path=clusters/my-cluster --read-write-key --personal
 ```
 
 Add in ./clusters/my-cluster/podinfo-deployment.yaml
@@ -78,7 +78,7 @@ kubectl get deployment/podinfo -oyaml | grep 'image:'
 
 Imgrep: **flux create image repository podinfo --image=docker.io/marina1327/app1-go --interval=5m --export > ./clusters/my-cluster/podinfo-registry.yaml**
 
-ImagePolicy ***flux create image policy podinfo --image-ref=podinfo --select-semver="^dev-(?P<ts>[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9]+)$" --export > ./clusters/my-cluster/podinfo-policy.yaml***
+ImagePolicy ./clusters/my-cluster/podinfo-policy.yaml***
 
 Check tags: 
 ```
@@ -93,3 +93,11 @@ ImageUpdateAutomation
 ```
 flux create image update flux-system --interval=10m --git-repo-ref=flux --git-repo-path="./clusters/my-cluster" --checkout-branch=main --push-branch=main --author-name=fluxcdbot --author-email=fluxcdbot@users.noreply.github.com --commit-template="{{range .Updated.Images}}{{println .}}{{end}}" --export > ./flux-system-automation.yaml
 ```
+
+
+Helm
+``
+helm repo add nginx-stable https://helm.nginx.com/stable && helm repo update
+```
+
+
