@@ -6,7 +6,9 @@ service:
 ingress:
   enabled: true
 autoscaling:
-  enabled: ftrue
+  enabled: true
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
+image:
+  repository: nginx/nginx-ingress

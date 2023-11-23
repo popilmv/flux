@@ -1,21 +1,2 @@
-apiVersion: helm.fluxcd.io/v1
-kind: Service
-metadata:
-  name: nginx-ingress
-  namespace: dev
-  labels:
-    nginx-ingress 
-spec:
-  releaseName: nginx-ingres
-  externalIP: 34.107.74.43
-  ports:
-  - name: nginx-ingres
-    protocol: TCP
-    port: 8080
-    targetPort: 8888
-  externalIPs: 34.107.74.43
-  chart:
-    repository: https://helm.nginx.com/stable
-    name: nginx-ingress
-    version: 3.3.2
-  type: LoadBalancer 
+name: nginx-ingress
+version: 3.3.2
