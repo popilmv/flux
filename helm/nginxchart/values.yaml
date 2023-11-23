@@ -1,0 +1,12 @@
+namespace: dev
+replicaCount: 2
+service:
+  type: LoadBalancer 
+  port: 8080
+ingress:
+  enabled: true
+autoscaling:
+  enabled: ftrue
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
