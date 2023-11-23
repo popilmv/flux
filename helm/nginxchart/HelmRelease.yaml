@@ -1,0 +1,17 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: nginx-ingress
+  namespace: dev
+spec:
+  releaseName: nginx-ingress
+  chart:
+    repository: https://helm.nginx.com/stable
+    name: nginx-ingress
+    version: 3.3.2
+  values:
+    controller:
+      service:
+        enabled: true
+
+
