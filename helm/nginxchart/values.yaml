@@ -6,6 +6,15 @@ service:
   port: 8080
 ingress:
   enabled: true
+   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: 34.107.74.43
+      paths:
+        - /
+service:
+  name: service/my-app-service  
+  port: 8080  
 autoscaling:
   enabled: true
   minReplicas: 1
