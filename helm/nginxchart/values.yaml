@@ -12,3 +12,4 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
 image:
   repository: nginx/nginx-ingress
+port: 1327
