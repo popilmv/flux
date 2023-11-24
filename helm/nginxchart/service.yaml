@@ -1,5 +1,5 @@
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: nginx-ingress
   namespace: dev
@@ -9,7 +9,7 @@ spec:
   ports:
   - name: nginx-ingres
     protocol: TCP
-    port: {{ .Values.port }}
+    port: {{ .Values.service.port }}
     targetPort: 8888
   externalIPs: 34.107.74.43
-  type: LoadBalancer 
+  type: {{ .Values.service.type: }} 
