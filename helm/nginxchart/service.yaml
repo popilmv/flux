@@ -9,7 +9,7 @@ spec:
   ports:
   - name: nginx-ingres
     protocol: TCP
-    port: 8080
+    port: {{ .Values.port }}
     targetPort: 8888
   externalIPs: 34.107.74.43
   type: LoadBalancer 
