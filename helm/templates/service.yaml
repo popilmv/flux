@@ -5,8 +5,7 @@ metadata:
   namespace: dev
 spec:
   ports:
-  - nodePort: 32284
-    port: {{ .Values.service.port }}
+  - port: {{ .Values.service.port }}
     protocol: TCP
     targetPort: {{ .Values.service.port }}
   selector:
