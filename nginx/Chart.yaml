@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.9.4
 description: Ingress controller for Kubernetes using NGINX as a reverse proxy and
   load balancer
-home: https://github.com/kubernetes/ingress-nginx
+home: https://github.com/kubernetes/ingress-controller
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/500px-Nginx_logo.svg.png
 keywords:
 - ingress
@@ -15,7 +15,7 @@ maintainers:
 - name: rikatz
 - name: strongjz
 - name: tao12345666333
-name: ingress-nginx
+name: ingress-controller
 sources:
-- https://github.com/kubernetes/ingress-nginx
+- https://github.com/kubernetes/ingress-controller
 version: 4.8.3

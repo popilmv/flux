@@ -1,12 +1,12 @@
-# ingress-nginx
+# ingress-controller
 
-[ingress-nginx](https://github.com/kubernetes/ingress-nginx) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
+[ingress-controller](https://github.com/kubernetes/ingress-controller) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
 
 ![Version: 4.8.3](https://img.shields.io/badge/Version-4.8.3-informational?style=flat-square) ![AppVersion: 1.9.4](https://img.shields.io/badge/AppVersion-1.9.4-informational?style=flat-square)
 
 To use, add `ingressClassName: nginx` spec field or the `kubernetes.io/ingress.class: nginx` annotation to your Ingress resources.
 
-This chart bootstraps an ingress-nginx deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an ingress-controller deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Requirements
 
@@ -15,7 +15,7 @@ Kubernetes: `>=1.20.0-0`
 ## Get Repo Info
 
 ```console
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo add ingress-controller https://kubernetes.github.io/ingress-controller
 helm repo update
 ```
 
@@ -24,10 +24,10 @@ helm repo update
 **Important:** only helm3 is supported
 
 ```console
-helm install [RELEASE_NAME] ingress-nginx/ingress-nginx
+helm install [RELEASE_NAME] ingress-controller/ingress-controller
 ```
 
-The command deploys ingress-nginx on the Kubernetes cluster in the default configuration.
+The command deploys ingress-controller on the Kubernetes cluster in the default configuration.
 
 _See [configuration](#configuration) below._
 
@@ -53,7 +53,7 @@ _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documen
 
 ### Migrating from stable/nginx-ingress
 
-There are two main ways to migrate a release from `stable/nginx-ingress` to `ingress-nginx/ingress-nginx` chart:
+There are two main ways to migrate a release from `stable/nginx-ingress` to `ingress-controller/ingress-controller` chart:
 
 1. For Nginx Ingress controllers used for non-critical services, the easiest method is to [uninstall](#uninstall-chart) the old release and [install](#install-chart) the new one
 1. For critical services in production that require zero-downtime, you will want to:
@@ -62,14 +62,14 @@ There are two main ways to migrate a release from `stable/nginx-ingress` to `ing
     1. Log traffic from both controllers during this changeover
     1. [Uninstall](#uninstall-chart) the old controller once traffic has fully drained from it
 
-Note that there are some different and upgraded configurations between the two charts, described by Rimas Mocevicius from JFrog in the "Upgrading to ingress-nginx Helm chart" section of [Migrating from Helm chart nginx-ingress to ingress-nginx](https://rimusz.net/migrating-to-ingress-nginx). As the `ingress-nginx/ingress-nginx` chart continues to update, you will want to check current differences by running [helm configuration](#configuration) commands on both charts.
+Note that there are some different and upgraded configurations between the two charts, described by Rimas Mocevicius from JFrog in the "Upgrading to ingress-controller Helm chart" section of [Migrating from Helm chart nginx-ingress to ingress-controller](https://rimusz.net/migrating-to-ingress-controller). As the `ingress-controller/ingress-controller` chart continues to update, you will want to check current differences by running [helm configuration](#configuration) commands on both charts.
 
 ## Configuration
 
 See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments, visit the chart's [values.yaml](./values.yaml), or run these configuration commands:
 
 ```console
-helm show values ingress-nginx/ingress-nginx
+helm show values ingress-controller/ingress-controller
 ```
 
 ### PodDisruptionBudget
@@ -84,13 +84,13 @@ The Ingress-Nginx Controller can export Prometheus metrics, by setting `controll
 You can add Prometheus annotations to the metrics service using `controller.metrics.service.annotations`.
 Alternatively, if you use the Prometheus Operator, you can enable ServiceMonitor creation using `controller.metrics.serviceMonitor.enabled`. And set `controller.metrics.serviceMonitor.additionalLabels.release="prometheus"`. "release=prometheus" should match the label configured in the prometheus servicemonitor ( see `kubectl get servicemonitor prometheus-kube-prom-prometheus -oyaml -n prometheus`)
 
-### ingress-nginx nginx\_status page/stats server
+### ingress-controller nginx\_status page/stats server
 
 Previous versions of this chart had a `controller.stats.*` configuration block, which is now obsolete due to the following changes in Ingress-Nginx Controller:
 
-- In [0.16.1](https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md#0161), the vts (virtual host traffic status) dashboard was removed
-- In [0.23.0](https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md#0230), the status page at port 18080 is now a unix socket webserver only available at localhost.
-  You can use `curl --unix-socket /tmp/nginx-status-server.sock http://localhost/nginx_status` inside the controller container to access it locally, or use the snippet from [nginx-ingress changelog](https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md#0230) to re-enable the http server
+- In [0.16.1](https://github.com/kubernetes/ingress-controller/blob/main/Changelog.md#0161), the vts (virtual host traffic status) dashboard was removed
+- In [0.23.0](https://github.com/kubernetes/ingress-controller/blob/main/Changelog.md#0230), the status page at port 18080 is now a unix socket webserver only available at localhost.
+  You can use `curl --unix-socket /tmp/nginx-status-server.sock http://localhost/nginx_status` inside the controller container to access it locally, or use the snippet from [nginx-ingress changelog](https://github.com/kubernetes/ingress-controller/blob/main/Changelog.md#0230) to re-enable the http server
 
 ### ExternalDNS Service Configuration
 
@@ -105,7 +105,7 @@ controller:
 
 ### AWS L7 ELB with SSL Termination
 
-Annotate the controller as shown in the [nginx-ingress l7 patch](https://github.com/kubernetes/ingress-nginx/blob/ab3a789caae65eec4ad6e3b46b19750b481b6bce/deploy/aws/l7/service-l7.yaml):
+Annotate the controller as shown in the [nginx-ingress l7 patch](https://github.com/kubernetes/ingress-controller/blob/ab3a789caae65eec4ad6e3b46b19750b481b6bce/deploy/aws/l7/service-l7.yaml):
 
 ```yaml
 controller:
@@ -200,7 +200,7 @@ Optionally you can set `controller.service.loadBalancerIP` if you need a static 
 With nginx-ingress-controller version 0.25+, the Ingress-Nginx Controller pod exposes an endpoint that will integrate with the `validatingwebhookconfiguration` Kubernetes feature to prevent bad ingress from being added to the cluster.
 **This feature is enabled by default since 0.31.0.**
 
-With nginx-ingress-controller in 0.25.* work only with kubernetes 1.14+, 0.26 fix [this issue](https://github.com/kubernetes/ingress-nginx/pull/4521)
+With nginx-ingress-controller in 0.25.* work only with kubernetes 1.14+, 0.26 fix [this issue](https://github.com/kubernetes/ingress-controller/pull/4521)
 
 #### How the Chart Configures the Hooks
 A validating and configuration requires the endpoint to which the request is sent to use TLS. It is possible to set up custom certificates to do this, but in most cases, a self-signed certificate is enough. The setup of this component requires some more complex orchestration when using helm. The steps are created to be idempotent and to allow turning the feature on and off without running into helm quirks.
@@ -234,7 +234,7 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | commonLabels | object | `{}` |  |
-| controller.addHeaders | object | `{}` | Will add custom headers before sending response traffic to the client according to: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#add-headers |
+| controller.addHeaders | object | `{}` | Will add custom headers before sending response traffic to the client according to: https://kubernetes.github.io/ingress-controller/user-guide/nginx-configuration/configmap/#add-headers |
 | controller.admissionWebhooks.annotations | object | `{}` |  |
 | controller.admissionWebhooks.certManager.admissionCert.duration | string | `""` |  |
 | controller.admissionWebhooks.certManager.enabled | bool | `false` |  |
@@ -252,9 +252,9 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | controller.admissionWebhooks.objectSelector | object | `{}` |  |
 | controller.admissionWebhooks.patch.enabled | bool | `true` |  |
 | controller.admissionWebhooks.patch.image.digest | string | `"sha256:a7943503b45d552785aa3b5e457f169a5661fb94d82b8a3373bcd9ebaf9aac80"` |  |
-| controller.admissionWebhooks.patch.image.image | string | `"ingress-nginx/kube-webhook-certgen"` |  |
+| controller.admissionWebhooks.patch.image.image | string | `"ingress-controller/kube-webhook-certgen"` |  |
 | controller.admissionWebhooks.patch.image.pullPolicy | string | `"IfNotPresent"` |  |
-| controller.admissionWebhooks.patch.image.registry | string | `"registry.k8s.io"` |  |
+| controller.admissionWebhooks.patch.image.registry | string | `"registry.nginx.org"` |  |
 | controller.admissionWebhooks.patch.image.tag | string | `"v20231011-8b53cabe0"` |  |
 | controller.admissionWebhooks.patch.labels | object | `{}` | Labels to be added to patch job resources |
 | controller.admissionWebhooks.patch.nodeSelector."kubernetes.io/os" | string | `"linux"` |  |
@@ -283,7 +283,7 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | controller.autoscaling.targetCPUUtilizationPercentage | int | `50` |  |
 | controller.autoscaling.targetMemoryUtilizationPercentage | int | `50` |  |
 | controller.autoscalingTemplate | list | `[]` |  |
-| controller.config | object | `{}` | Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/ |
+| controller.config | object | `{}` | Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-controller/user-guide/nginx-configuration/configmap/ |
 | controller.configAnnotations | object | `{}` | Annotations to be added to the controller config configuration configmap. |
 | controller.configMapNamespace | string | `""` | Allows customization of the configmap / nginx-configmap namespace; defaults to $(POD_NAMESPACE) |
 | controller.containerName | string | `"controller"` | Configures the controller container name |
@@ -316,14 +316,14 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | controller.image.chroot | bool | `false` |  |
 | controller.image.digest | string | `"sha256:5b161f051d017e55d358435f295f5e9a297e66158f136321d9b04520ec6c48a3"` |  |
 | controller.image.digestChroot | string | `"sha256:5976b1067cfbca8a21d0ba53d71f83543a73316a61ea7f7e436d6cf84ddf9b26"` |  |
-| controller.image.image | string | `"ingress-nginx/controller"` |  |
+| controller.image.image | string | `"ingress-controller/controller"` |  |
 | controller.image.pullPolicy | string | `"IfNotPresent"` |  |
-| controller.image.registry | string | `"registry.k8s.io"` |  |
+| controller.image.registry | string | `"registry.nginx.org"` |  |
 | controller.image.runAsUser | int | `101` |  |
 | controller.image.tag | string | `"v1.9.4"` |  |
 | controller.ingressClass | string | `"nginx"` | For backwards compatibility with ingress.class annotation, use ingressClass. Algorithm is as follows, first ingressClassName is considered, if not present, controller looks for ingress.class annotation |
 | controller.ingressClassByName | bool | `false` | Process IngressClass per name (additionally as per spec.controller). |
-| controller.ingressClassResource.controllerValue | string | `"k8s.io/ingress-nginx"` | Controller-value of the controller that is processing this ingressClass |
+| controller.ingressClassResource.controllerValue | string | `"nginx.org/ingress-controller"` | Controller-value of the controller that is processing this ingressClass |
 | controller.ingressClassResource.default | bool | `false` | Is this the default ingressClass for the cluster |
 | controller.ingressClassResource.enabled | bool | `true` | Is this ingressClass enabled or not |
 | controller.ingressClassResource.name | string | `"nginx"` | Name of the ingressClass |
@@ -377,13 +377,13 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | controller.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | Node labels for controller pod assignment # Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ # |
 | controller.opentelemetry.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | controller.opentelemetry.enabled | bool | `false` |  |
-| controller.opentelemetry.image | string | `"registry.k8s.io/ingress-nginx/opentelemetry:v20230721-3e2062ee5@sha256:13bee3f5223883d3ca62fee7309ad02d22ec00ff0d7033e3e9aca7a9f60fd472"` |  |
+| controller.opentelemetry.image | string | `"registry.nginx.org/ingress-controller/opentelemetry:v20230721-3e2062ee5@sha256:13bee3f5223883d3ca62fee7309ad02d22ec00ff0d7033e3e9aca7a9f60fd472"` |  |
 | controller.opentelemetry.resources | object | `{}` |  |
 | controller.podAnnotations | object | `{}` | Annotations to be added to controller pods # |
 | controller.podLabels | object | `{}` | Labels to add to the pod container metadata |
 | controller.podSecurityContext | object | `{}` | Security Context policies for controller pods |
 | controller.priorityClassName | string | `""` |  |
-| controller.proxySetHeaders | object | `{}` | Will add custom headers before sending traffic to backends according to https://github.com/kubernetes/ingress-nginx/tree/main/docs/examples/customization/custom-headers |
+| controller.proxySetHeaders | object | `{}` | Will add custom headers before sending traffic to backends according to https://github.com/kubernetes/ingress-controller/tree/main/docs/examples/customization/custom-headers |
 | controller.publishService | object | `{"enabled":true,"pathOverride":""}` | Allows customization of the source of the IP address or FQDN to report in the ingress status field. By default, it reads the information provided by the service. If disable, the status field reports the IP address of the node or nodes where an ingress controller pod is running. |
 | controller.publishService.enabled | bool | `true` | Enable 'publishService' or not |
 | controller.publishService.pathOverride | string | `""` | Allows overriding of the publish service to bind to Must be <namespace>/<service_name> |
@@ -396,7 +396,7 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | controller.readinessProbe.successThreshold | int | `1` |  |
 | controller.readinessProbe.timeoutSeconds | int | `1` |  |
 | controller.replicaCount | int | `1` |  |
-| controller.reportNodeInternalIp | bool | `false` | Bare-metal considerations via the host network https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network Ingress status was blank because there is no Service exposing the Ingress-Nginx Controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply |
+| controller.reportNodeInternalIp | bool | `false` | Bare-metal considerations via the host network https://kubernetes.github.io/ingress-controller/deploy/baremetal/#via-the-host-network Ingress status was blank because there is no Service exposing the Ingress-Nginx Controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply |
 | controller.resources.requests.cpu | string | `"100m"` |  |
 | controller.resources.requests.memory | string | `"90Mi"` |  |
 | controller.scope.enabled | bool | `false` | Enable 'scope' or not |
@@ -459,7 +459,7 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | defaultBackend.image.image | string | `"defaultbackend-amd64"` |  |
 | defaultBackend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | defaultBackend.image.readOnlyRootFilesystem | bool | `true` |  |
-| defaultBackend.image.registry | string | `"registry.k8s.io"` |  |
+| defaultBackend.image.registry | string | `"registry.nginx.org"` |  |
 | defaultBackend.image.runAsNonRoot | bool | `true` |  |
 | defaultBackend.image.runAsUser | int | `65534` |  |
 | defaultBackend.image.tag | string | `"1.5"` |  |
@@ -496,7 +496,7 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | defaultBackend.serviceAccount.name | string | `""` |  |
 | defaultBackend.tolerations | list | `[]` | Node tolerations for server scheduling to nodes with taints # Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/ # |
 | defaultBackend.updateStrategy | object | `{}` | The update strategy to apply to the Deployment or DaemonSet # |
-| dhParam | string | `""` | A base64-encoded Diffie-Hellman parameter. This can be generated with: `openssl dhparam 4096 2> /dev/null | base64` # Ref: https://github.com/kubernetes/ingress-nginx/tree/main/docs/examples/customization/ssl-dh-param |
+| dhParam | string | `""` | A base64-encoded Diffie-Hellman parameter. This can be generated with: `openssl dhparam 4096 2> /dev/null | base64` # Ref: https://github.com/kubernetes/ingress-controller/tree/main/docs/examples/customization/ssl-dh-param |
 | imagePullSecrets | list | `[]` | Optional array of imagePullSecrets containing private registry credentials # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | namespaceOverride | string | `""` | Override the deployment namespace; defaults to .Release.Namespace |
 | podSecurityPolicy.enabled | bool | `false` |  |
@@ -508,5 +508,5 @@ As of version `1.26.0` of this chart, by simply not providing any clusterIP valu
 | serviceAccount.automountServiceAccountToken | bool | `true` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
-| tcp | object | `{}` | TCP service key-value pairs # Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md # |
-| udp | object | `{}` | UDP service key-value pairs # Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md # |
+| tcp | object | `{}` | TCP service key-value pairs # Ref: https://github.com/kubernetes/ingress-controller/blob/main/docs/user-guide/exposing-tcp-udp-services.md # |
+| udp | object | `{}` | UDP service key-value pairs # Ref: https://github.com/kubernetes/ingress-controller/blob/main/docs/user-guide/exposing-tcp-udp-services.md # |

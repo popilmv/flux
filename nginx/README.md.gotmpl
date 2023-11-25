@@ -1,18 +1,18 @@
 {{ template "chart.header" . }}
-[ingress-nginx](https://github.com/kubernetes/ingress-nginx) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
+[ingress-controller](https://github.com/kubernetes/ingress-controller) Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer
 
 {{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
 To use, add `ingressClassName: nginx` spec field or the `kubernetes.io/ingress.class: nginx` annotation to your Ingress resources.
 
-This chart bootstraps an ingress-nginx deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an ingress-controller deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 {{ template "chart.requirementsSection" . }}
 
 ## Get Repo Info
 
 ```console
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo add ingress-controller https://kubernetes.github.io/ingress-controller
 helm repo update
 ```
 
@@ -21,10 +21,10 @@ helm repo update
 **Important:** only helm3 is supported
 
 ```console
-helm install [RELEASE_NAME] ingress-nginx/ingress-nginx
+helm install [RELEASE_NAME] ingress-controller/ingress-controller
 ```
 
-The command deploys ingress-nginx on the Kubernetes cluster in the default configuration.
+The command deploys ingress-controller on the Kubernetes cluster in the default configuration.
 
 _See [configuration](#configuration) below._
 
@@ -50,7 +50,7 @@ _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documen
 
 ### Migrating from stable/nginx-ingress
 
-There are two main ways to migrate a release from `stable/nginx-ingress` to `ingress-nginx/ingress-nginx` chart:
+There are two main ways to migrate a release from `stable/nginx-ingress` to `ingress-controller/ingress-controller` chart:
 
 1. For Nginx Ingress controllers used for non-critical services, the easiest method is to [uninstall](#uninstall-chart) the old release and [install](#install-chart) the new one
 1. For critical services in production that require zero-downtime, you will want to:
@@ -59,14 +59,14 @@ There are two main ways to migrate a release from `stable/nginx-ingress` to `ing
     1. Log traffic from both controllers during this changeover
     1. [Uninstall](#uninstall-chart) the old controller once traffic has fully drained from it
 
-Note that there are some different and upgraded configurations between the two charts, described by Rimas Mocevicius from JFrog in the "Upgrading to ingress-nginx Helm chart" section of [Migrating from Helm chart nginx-ingress to ingress-nginx](https://rimusz.net/migrating-to-ingress-nginx). As the `ingress-nginx/ingress-nginx` chart continues to update, you will want to check current differences by running [helm configuration](#configuration) commands on both charts.
+Note that there are some different and upgraded configurations between the two charts, described by Rimas Mocevicius from JFrog in the "Upgrading to ingress-controller Helm chart" section of [Migrating from Helm chart nginx-ingress to ingress-controller](https://rimusz.net/migrating-to-ingress-controller). As the `ingress-controller/ingress-controller` chart continues to update, you will want to check current differences by running [helm configuration](#configuration) commands on both charts.
 
 ## Configuration
 
 See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments, visit the chart's [values.yaml](./values.yaml), or run these configuration commands:
 
 ```console
-helm show values ingress-nginx/ingress-nginx
+helm show values ingress-controller/ingress-controller
 ```
 
 ### PodDisruptionBudget
@@ -81,13 +81,13 @@ The Ingress-Nginx Controller can export Prometheus metrics, by setting `controll
 You can add Prometheus annotations to the metrics service using `controller.metrics.service.annotations`.
 Alternatively, if you use the Prometheus Operator, you can enable ServiceMonitor creation using `controller.metrics.serviceMonitor.enabled`. And set `controller.metrics.serviceMonitor.additionalLabels.release="prometheus"`. "release=prometheus" should match the label configured in the prometheus servicemonitor ( see `kubectl get servicemonitor prometheus-kube-prom-prometheus -oyaml -n prometheus`)
 
-### ingress-nginx nginx\_status page/stats server
+### ingress-controller nginx\_status page/stats server
 
 Previous versions of this chart had a `controller.stats.*` configuration block, which is now obsolete due to the following changes in Ingress-Nginx Controller:
 
-- In [0.16.1](https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md#0161), the vts (virtual host traffic status) dashboard was removed
-- In [0.23.0](https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md#0230), the status page at port 18080 is now a unix socket webserver only available at localhost.
-  You can use `curl --unix-socket /tmp/nginx-status-server.sock http://localhost/nginx_status` inside the controller container to access it locally, or use the snippet from [nginx-ingress changelog](https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md#0230) to re-enable the http server
+- In [0.16.1](https://github.com/kubernetes/ingress-controller/blob/main/Changelog.md#0161), the vts (virtual host traffic status) dashboard was removed
+- In [0.23.0](https://github.com/kubernetes/ingress-controller/blob/main/Changelog.md#0230), the status page at port 18080 is now a unix socket webserver only available at localhost.
+  You can use `curl --unix-socket /tmp/nginx-status-server.sock http://localhost/nginx_status` inside the controller container to access it locally, or use the snippet from [nginx-ingress changelog](https://github.com/kubernetes/ingress-controller/blob/main/Changelog.md#0230) to re-enable the http server
 
 ### ExternalDNS Service Configuration
 
@@ -102,7 +102,7 @@ controller:
 
 ### AWS L7 ELB with SSL Termination
 
-Annotate the controller as shown in the [nginx-ingress l7 patch](https://github.com/kubernetes/ingress-nginx/blob/ab3a789caae65eec4ad6e3b46b19750b481b6bce/deploy/aws/l7/service-l7.yaml):
+Annotate the controller as shown in the [nginx-ingress l7 patch](https://github.com/kubernetes/ingress-controller/blob/ab3a789caae65eec4ad6e3b46b19750b481b6bce/deploy/aws/l7/service-l7.yaml):
 
 ```yaml
 controller:
@@ -197,7 +197,7 @@ Optionally you can set `controller.service.loadBalancerIP` if you need a static 
 With nginx-ingress-controller version 0.25+, the Ingress-Nginx Controller pod exposes an endpoint that will integrate with the `validatingwebhookconfiguration` Kubernetes feature to prevent bad ingress from being added to the cluster.
 **This feature is enabled by default since 0.31.0.**
 
-With nginx-ingress-controller in 0.25.* work only with kubernetes 1.14+, 0.26 fix [this issue](https://github.com/kubernetes/ingress-nginx/pull/4521)
+With nginx-ingress-controller in 0.25.* work only with kubernetes 1.14+, 0.26 fix [this issue](https://github.com/kubernetes/ingress-controller/pull/4521)
 
 #### How the Chart Configures the Hooks
 A validating and configuration requires the endpoint to which the request is sent to use TLS. It is possible to set up custom certificates to do this, but in most cases, a self-signed certificate is enough. The setup of this component requires some more complex orchestration when using helm. The steps are created to be idempotent and to allow turning the feature on and off without running into helm quirks.
