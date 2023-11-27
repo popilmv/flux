@@ -6,11 +6,12 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  controller: nginx.org/ingress-controlle
   rules:
   - host: cluster.mari1327.pp.ua
     http:
       paths:
-      - path: /
+      - path: /app
         pathType: Prefix
         backend:
           service:
