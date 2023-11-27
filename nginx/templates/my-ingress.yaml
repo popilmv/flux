@@ -16,7 +16,7 @@ spec:
           service:
             name: heml-app-service
             port:
-              number: 8080
+              number: {{ .Values.service.port }}
 ---
 apiVersion: v1
 kind: Service
@@ -26,9 +26,9 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: {{ .Values.service.port }}
   selector:
     app: chart-golang-deploy 
   sessionAffinity: None
-  type: ClusterIP
+  type: {{ .Values.service.type }}
 
