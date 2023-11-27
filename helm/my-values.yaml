@@ -1,12 +1,10 @@
 replicaCount: 2
 service:
   name: nginx/nginx-ingress 
-  type: LoadBalancer 
+  type: ClusterIP
   port: 8080
 ingress:
   enabled: true
-  hosts:
-    - host: 34.107.74.43 
 autoscaling:
   enabled: true
   minReplicas: 1
