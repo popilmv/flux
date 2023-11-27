@@ -24,6 +24,20 @@ spec:
   sourceRef:
     kind: GitRepository
     name: app
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: nginx
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  secretRef:
+    name: flux-system
+  url: ssh://git@github.com/popilmv/flux    
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
