@@ -3,6 +3,5 @@ kind: Kustomization
 metadata:
   name: my-kustomization  
 resources:
-  - my-values.yaml
   - templates/my-ingress.yaml
   - templates/deployment.yaml
