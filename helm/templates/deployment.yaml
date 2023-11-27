@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-dev-chart
-  namespace: dev
+  namespace: helm
   labels:
     app: chart-golang-deploy
     release: beta
