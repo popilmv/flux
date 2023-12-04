@@ -29,27 +29,13 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: monitoring
-  namespace: default
+  namespace: flux-system
 spec:
-  interval: 2m0s
+  interval: 1m0s
   ref:
     branch: main
   secretRef:
     name: flux-system
-  url: ssh://git@github.com/popilmv/monitoring.git
----
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: monitoring
-  namespace: default
-spec:
-  interval: 3m0s
-  path: ./grafana
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: monitoring
+  url: ssh://git@github.com/popilmv/monitoring
 
 
